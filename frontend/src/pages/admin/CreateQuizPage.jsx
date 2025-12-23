@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createQuiz } from '../../api/quiz';
 import Navbar from '../../components/Navbar';
@@ -7,6 +7,7 @@ const CreateQuizPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const questionRefs = useRef([]);
 
     const [quizData, setQuizData] = useState({
         title: '',
@@ -133,6 +134,12 @@ const CreateQuizPage = () => {
         }
     };
 
+    useEffect(() => {
+        if (questionRefs.current[questions.length - 1]) {
+            questionRefs.current[questions.length - 1].focus();
+        }
+    }, [questions]);
+
     return (
         <>
             <Navbar />
@@ -214,6 +221,7 @@ const CreateQuizPage = () => {
                                         className="form-select"
                                         value={question.question_type}
                                         onChange={(e) => updateQuestion(index, 'question_type', e.target.value)}
+                                        ref={(el) => (questionRefs.current[index] = el)}
                                     >
                                         <option value="mcq">Multiple Choice (MCQ)</option>
                                         <option value="true_false">True/False</option>
@@ -324,7 +332,7 @@ const CreateQuizPage = () => {
                             className="btn btn-primary btn-large"
                             disabled={loading}
                         >
-                            {loading ? 'Creating...' : 'Create Quiz'}
+                            {loading ? 'Creating...' : `Create Quiz with ${questions.length} Question${questions.length > 1 ? 's' : ''}`}
                         </button>
                     </div>
                 </form>
