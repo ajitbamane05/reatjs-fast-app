@@ -1,51 +1,54 @@
+import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Public Pages
-import LandingPage from './pages/LandingPage';
-import QuizPage from './pages/QuizPage';
-import ResultsPage from './pages/ResultsPage';
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const QuizPage = lazy(() => import('./pages/QuizPage'));
+const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 
 // Admin Pages
-import LoginPage from './pages/admin/LoginPage';
-import DashboardPage from './pages/admin/DashboardPage';
-import CreateQuizPage from './pages/admin/CreateQuizPage';
+const LoginPage = lazy(() => import('./pages/admin/LoginPage'));
+const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
+const CreateQuizPage = lazy(() => import('./pages/admin/CreateQuizPage'));
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <UserProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/quiz/:quizId" element={<QuizPage />} />
-            <Route path="/results/:submissionId" element={<ResultsPage />} />
+          <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/quiz/:quizId" element={<QuizPage />} />
+              <Route path="/results/:submissionId" element={<ResultsPage />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin/login" element={<LoginPage />} />
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/quiz/create"
-              element={
-                <ProtectedRoute>
-                  <CreateQuizPage />
-                </ProtectedRoute>
-              }
-            />
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<LoginPage />} />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/quiz/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateQuizPage />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Catch all route - Redirect 404 to Home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+              {/* Catch all route - Redirect 404 to Home */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
         </UserProvider>
       </AuthProvider>
     </Router>
