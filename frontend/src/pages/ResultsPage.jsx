@@ -1,9 +1,11 @@
+import { useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const ResultsPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const resultRef = useRef(null);
     const result = location.state?.result;
 
     if (!result) {
@@ -14,6 +16,12 @@ const ResultsPage = () => {
     const percentage = result.percentage.toFixed(1);
     const isPassing = percentage >= 60;
 
+    useEffect(() => {
+        if (resultRef.current) {
+            resultRef.current.focus();
+        }
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -21,11 +29,11 @@ const ResultsPage = () => {
                 {/* Score Card */}
                 <div
                     className={`card text-center mb-12 animate-fade-in ${isPassing
-                            ? 'bg-gradient-to-br from-green-500/10 to-green-500/5'
-                            : 'bg-gradient-to-br from-red-500/10 to-red-500/5'
+                        ? 'bg-gradient-to-br from-green-500/10 to-green-500/5'
+                        : 'bg-gradient-to-br from-red-500/10 to-red-500/5'
                         }`}
                 >
-                    <h1 className="text-4xl mb-4">
+                    <h1 className="text-4xl mb-4" ref={resultRef} tabIndex={-1}>
                         {isPassing ? '🎉 Great Job!' : '📚 Keep Learning!'}
                     </h1>
                     <div className="text-2xl mb-2">
