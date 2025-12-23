@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -42,6 +42,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* Catch all route - Redirect 404 to Home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </UserProvider>
       </AuthProvider>
