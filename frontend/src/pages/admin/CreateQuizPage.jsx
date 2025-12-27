@@ -135,10 +135,11 @@ const CreateQuizPage = () => {
     };
 
     useEffect(() => {
+        if (questions.length <= 1) return;
         if (questionRefs.current[questions.length - 1]) {
             questionRefs.current[questions.length - 1].focus();
         }
-    }, [questions]);
+    }, [addQuestion]);
 
     return (
         <>
