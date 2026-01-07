@@ -1,5 +1,9 @@
 import sys
 import os
+from alembic import context
+from logging.config import fileConfig
+
+from sqlalchemy import engine_from_config, pool
 
 # Add the project directory to sys.path to allow imports
 sys.path.append(os.getcwd())
@@ -7,7 +11,7 @@ sys.path.append(os.getcwd())
 from app.core.config import settings
 from app.core.database import Base
 # Import all models to ensure they are registered with Base.metadata
-from app.models import admin, user, quiz, question, answer, submission
+from app.models import admin, user, quiz, question, answer, submission # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

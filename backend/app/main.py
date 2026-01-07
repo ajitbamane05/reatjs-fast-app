@@ -5,7 +5,7 @@ from app.core.database import Base, engine
 from app.handlers import auth_handler, user_handler, quiz_handler, public_handler
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 # Create FastAPI application
 app = FastAPI(
